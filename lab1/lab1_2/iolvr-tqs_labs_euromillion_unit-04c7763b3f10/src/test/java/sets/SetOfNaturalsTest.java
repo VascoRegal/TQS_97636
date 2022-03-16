@@ -16,6 +16,7 @@ public class SetOfNaturalsTest {
     private SetOfNaturals setB;
     private SetOfNaturals setC;
     private SetOfNaturals setD;
+    private SetOfNaturals setE;
 
     @BeforeEach
     public void setUp() {
@@ -27,11 +28,12 @@ public class SetOfNaturalsTest {
             setC.add(i * 10);
         }
         setD = SetOfNaturals.fromArray(new int[]{30, 40, 50, 60, 10, 20});
+        setE = new SetOfNaturals();
     }
 
     @AfterEach
     public void tearDown() {
-        setA = setB = setC = setD = null;
+        setA = setB = setC = setD = setE = null;
     }
 
     @Test
@@ -62,4 +64,22 @@ public class SetOfNaturalsTest {
     }
 
 
+    @Test
+    public void testSize() {
+        assertTrue(setE.size() == 0, "size: should be 0 on empty set");
+        assertTrue(setB.size() == 6, "size: should contain number of elements");
+    }
+
+    @Test
+    public void testAddNonNatural() {
+        assertThrows(IllegalArgumentException.class, () -> setE.add(-30));
+        assertThrows(IllegalArgumentException.class, () -> setE.add(5/12));
+    }
+
+    @Test
+    public void testContains() {
+        setE.add(14); setE.add(31);
+        assertFalse(setE.contains(15));
+        assertTrue(setE.contains(31));
+    }
 }
