@@ -34,7 +34,7 @@ public class AddressResolverTest
 
     @InjectMocks
     private AddressResolver addressResolver;
-
+    
     @Test
     public void findAddressForLocationTest() throws RuntimeException, ParseException, URISyntaxException, IOException 
     {
@@ -42,8 +42,6 @@ public class AddressResolverTest
         double latitude = 40.6318;
         double longitude = 	-8.658;
         String request = String.format("http://open.mapquestapi.com/geocoding/v1/reverse?key=%s&location=%f,%f&includeRoadMetadata=true", apiKey, latitude, longitude);
-
-        System.out.println(request);
         Mockito.lenient().when(httpClient.doHttpGet(request)).thenReturn(response);
 
         Optional<Address> res = addressResolver.findAddressForLocation(latitude, longitude);
@@ -63,4 +61,6 @@ public class AddressResolverTest
         assertFalse(addressResolver.findAddressForLocation(-100.0, -220.2).isPresent());
         
     }
+    
+    
 }
