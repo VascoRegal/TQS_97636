@@ -3,6 +3,7 @@ package com.example.cars.controllers;
 import java.util.List;
 
 import com.example.cars.models.Car;
+import com.example.cars.models.CarDTO;
 import com.example.cars.services.CarManagerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,17 @@ public class CarController {
     private CarManagerService carManagerService;
 
     @PostMapping("/")
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
-        Car newCar = this.carManagerService.save(car);
+    public ResponseEntity<Car> createCar(@RequestBody CarDTO car) {
+        Car newCar = this.carManagerService.save(car.toCarEntity());
         return new ResponseEntity<Car>(newCar, HttpStatus.CREATED);
     }
 
+    @GetMapping("/")
     public List<Car> getAllCars() {
         return this.carManagerService.getAllCars();
     }
 
+    @GetMapping("/{id}")
     public ResponseEntity<Car> getCarById(Long id) {
         Car found = this.carManagerService.getCarDetails(id);
         HttpStatus code;

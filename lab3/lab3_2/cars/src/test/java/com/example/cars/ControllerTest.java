@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.cars;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CarController.class)
-class C_EmployeeController_WithMockServiceTest {
+class ControllerTest {
 
     @Autowired
     private MockMvc mvc;   
@@ -45,7 +45,7 @@ class C_EmployeeController_WithMockServiceTest {
         when( service.save(Mockito.any())).thenReturn(car);
 
         mvc.perform(
-                post("/api/cars").contentType(MediaType.APPLICATION_JSON).content(JsonUtils.toJson(car)))
+                post("/api/cars/").contentType(MediaType.APPLICATION_JSON).content(JsonUtils.toJson(car)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.maker", is("Toyota")));
 
@@ -54,7 +54,7 @@ class C_EmployeeController_WithMockServiceTest {
     }
 
     @Test
-    void givenManyEmployees_whenGetEmployees_thenReturnJsonArray() throws Exception {
+    void givenManyCars_whenGetCars_thenReturnJsonArray() throws Exception {
         Car tcorolla = new Car("Toyota", "Corolla");
         Car fpunto = new Car("Fiat", "Punto");
         Car mpollara  = new Car("Mercedes", "Pollara");
@@ -64,7 +64,7 @@ class C_EmployeeController_WithMockServiceTest {
         when( service.getAllCars()).thenReturn(allCars);
 
         mvc.perform(
-                get("/api/employees").contentType(MediaType.APPLICATION_JSON))
+                get("/api/cars/").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].maker", is(tcorolla.getMaker())))

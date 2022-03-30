@@ -1,37 +1,28 @@
 package com.example.cars.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "cars")
-public class Car {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class CarDTO {
     private Long carId;
 
-    @Column(name = "maker")
     private String maker;
-
-    @Column(name = "model")
     private String model;
 
-    public Car() {};
-
-    public Car(String maker, String model) {
-        this.maker = maker;
-        this.model = model;
+    public static CarDTO fromCarEntity(Car car) {
+        return new CarDTO(car.getMaker(), car.getModel(), car.getCarId());
     }
 
-    public Car(String maker, String model, Long id) {
+    public Car toCarEntity() {
+        return new Car(this.getMaker(), this.getModel(), this.getCarId());
+    }
+
+    public CarDTO(String maker, String model, Long id) {
         this.maker = maker;
         this.model = model;
         this.carId = id;
+    }
+
+
+    public CarDTO() {
     }
 
     public Long getCarId() {

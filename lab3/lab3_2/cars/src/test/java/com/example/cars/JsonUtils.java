@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.cars;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
