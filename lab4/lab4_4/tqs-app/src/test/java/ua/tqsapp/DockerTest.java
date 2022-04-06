@@ -10,37 +10,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
+import io.github.bonigarcia.seljup.BrowserType;
+import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 
-import org.openqa.selenium.JavascriptExecutor;
-import java.util.*;
-
 @ExtendWith(SeleniumJupiter.class)
 public class DockerTest {
-  private WebDriver driver;
-  private Map<String, Object> vars;
-  JavascriptExecutor js;
-  @BeforeEach
-  public void setUp() {
-    WebDriverManager.firefoxdriver().setup();
-    driver = new FirefoxDriver();
-    js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
-  }
-
-  @AfterEach
-  public void tearDown() {
-    driver.quit();
-  }
-
   @Test
-  public void testdemo1() {
+  public void testdemo1(@DockerBrowser(type = BrowserType.CHROME) WebDriver driver) {
     driver.get("https://blazedemo.com/");
     driver.manage().window().setSize(new Dimension(1920, 1007));
     driver.findElement(By.name("fromPort")).click();
