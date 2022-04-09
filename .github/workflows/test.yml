@@ -1,0 +1,14 @@
+name: Testing Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'HW1/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: cd HW1/tqscovid && mvn test
