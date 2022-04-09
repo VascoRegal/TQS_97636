@@ -1,5 +1,5 @@
 package ua.tqs.tqscovid.api;
 
-public class ServiceController {
+public class APISportsTest {
     
 }

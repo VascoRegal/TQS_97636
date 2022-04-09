@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,28 +152,63 @@ public class ControllerTest {
                     new Deaths(55, 423, 21),
                     new Tests(21324, 123));
 
-        when(service.getStatsByDay("2021-03-01", "Portugal")).thenReturn(ds);
+        List<DailyStats> lst = new ArrayList<>();
+        lst.add(ds);
+
+        when(service.getStatsByDay("2021-03-01", "Portugal")).thenReturn(lst);
 
         mockMvc.perform(
             get("/api/stats/day?day=2021-03-01&country=Portugal").contentType("application/json"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.country.name", is("Portugal")))
-            .andExpect(jsonPath("$.day", is("2021-03-01")));
+            .andExpect(jsonPath("$[0].country.name", is("Portugal")))
+            .andExpect(jsonPath("$[0].day", is("2021-03-01")));
 
         verify(service, times(1)).getStatsByDay("2021-03-01", "Portugal");
     }
 
     @Test
     void whenGetStatsByInvalidLocalDate_thenReturnNullStats() throws Exception {
-        when(service.getStatsByDay("invaliddate", "Portugal")).thenReturn(new DailyStats(null, null, null, null, null));
+        when(service.getStatsByDay("invaliddate", "Portugal")).thenReturn(new ArrayList<>());
 
         mockMvc.perform(
         get("/api/stats/day?day=invaliddate&country=Portugal").contentType("application/json"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.cases", IsNull.nullValue()))
-        .andExpect(jsonPath("$.tests", IsNull.nullValue()))
-        .andExpect(jsonPath("$.day", IsNull.nullValue()));
+        .andExpect(jsonPath("$", Matchers.hasSize(0)));
 
         verify(service, times(1)).getStatsByDay("invaliddate", "Portugal");
+    }
+
+    @Test
+    void whenGetStatsByLocalDateAllCountires_thenDayAllCountries() throws Exception {
+        DailyStats ds = new DailyStats(LocalDate.parse("2021-03-01"),
+        new Country("Portugal"),
+        new Cases(12, 342412, 12, 321899, 3123, 654),
+        new Deaths(55, 423, 21),
+        new Tests(21324, 123));
+        DailyStats ds2 = new DailyStats(LocalDate.parse("2021-03-01"),
+        new Country("England"),
+        new Cases(12, 342412, 12, 321899, 3123, 654),
+        new Deaths(55, 423, 21),
+        new Tests(21324, 123));
+        DailyStats ds3 = new DailyStats(LocalDate.parse("2021-03-01"),
+        new Country("Ba"),
+        new Cases(12, 342412, 12, 321899, 3123, 654),
+        new Deaths(55, 423, 21),
+        new Tests(21324, 123));
+
+        List<DailyStats> lst = new ArrayList<>();
+        lst.add(ds); lst.add(ds2); lst.add(ds3);
+
+        when(service.getStatsByDay("2021-03-01", "All")).thenReturn(lst);
+
+        mockMvc.perform(
+        get("/api/stats/day?day=2021-03-01&country=All").contentType("application/json"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", Matchers.hasSize(3)))
+        .andExpect(jsonPath("$[0].country.name", is("Portugal")))
+        .andExpect(jsonPath("$[1].country.name", is("England")))
+        .andExpect(jsonPath("$[2].country.name", is("Ba")));
+
+        verify(service, times(1)).getStatsByDay("2021-03-01", "All");
     }
 }

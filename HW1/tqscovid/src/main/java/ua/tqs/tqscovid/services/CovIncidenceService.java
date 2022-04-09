@@ -10,6 +10,7 @@ import ua.tqs.tqscovid.models.DailyStats;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,12 +34,12 @@ public class CovIncidenceService {
         return this.externalAPIAdapter.getStatsByCountry(country);
     };
 
-    public DailyStats getStatsByDay(String date, String country) throws URISyntaxException, ParseException, IOException {
+    public List<DailyStats> getStatsByDay(String date, String country) throws URISyntaxException, ParseException, IOException {
         LocalDate ldate;
         try {
             ldate = LocalDate.parse(date);
         } catch(Exception e) {
-            return new DailyStats(null, null, null, null, null);
+            return new ArrayList<DailyStats>();
         }
 
         return this.externalAPIAdapter.getStatsByDay(ldate, country);

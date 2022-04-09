@@ -40,7 +40,7 @@ public class CovIncidenceController {
     }
 
     @GetMapping("/stats/day")
-    public DailyStats dailystats(@RequestParam String day, String country) throws URISyntaxException, ParseException, IOException {
+    public List<DailyStats> dailystats(@RequestParam String day, String country) throws URISyntaxException, ParseException, IOException {
         return this.covIncidenceService.getStatsByDay(day, country);
     }
 }

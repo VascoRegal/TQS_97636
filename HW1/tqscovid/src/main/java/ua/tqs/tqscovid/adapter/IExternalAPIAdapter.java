@@ -14,5 +14,5 @@ public interface IExternalAPIAdapter {
     public List<Country> getCountries() throws URISyntaxException, ParseException, IOException;
     public List<DailyStats> getStatsByCountry(String country) throws ParseException, IOException, URISyntaxException;
     public List<DailyStats> getAllStats() throws ParseException, IOException, URISyntaxException;
-    public DailyStats getStatsByDay(LocalDate date, String country) throws URISyntaxException, ParseException, IOException;
+    public List<DailyStats> getStatsByDay(LocalDate date, String country) throws URISyntaxException, ParseException, IOException;
 }
