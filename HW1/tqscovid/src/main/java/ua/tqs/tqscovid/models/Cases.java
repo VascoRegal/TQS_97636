@@ -1,5 +1,6 @@
 package ua.tqs.tqscovid.models;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 

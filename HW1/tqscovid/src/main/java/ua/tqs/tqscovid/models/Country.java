@@ -17,7 +17,9 @@ public class Country {
         return this.name;
     }
 
-    public String toString() {
-        return String.format("[<COUNTRY> name=%s]", this.name);
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() == Country.class) { return (this.name.equals(((Country) other).name)); };
+        return false;
     }
 }

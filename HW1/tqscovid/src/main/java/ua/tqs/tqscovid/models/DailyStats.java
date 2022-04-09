@@ -2,6 +2,7 @@ package ua.tqs.tqscovid.models;
 
 import java.time.LocalDate;
 
+
 public class DailyStats {
     private LocalDate day;
     private Country country;
@@ -59,4 +60,13 @@ public class DailyStats {
         return this.tests;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+        
+        DailyStats other = (DailyStats) o;
+        return ( (this.getCountry().getName().equals(other.getCountry().getName())) && (this.getDay().toString().equals(other.getDay().toString()))  );
+    }
 }

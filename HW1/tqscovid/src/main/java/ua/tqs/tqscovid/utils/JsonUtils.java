@@ -9,4 +9,5 @@ public class JsonUtils {
     static public JSONObject responseToJson(String response) throws ParseException {
         return (JSONObject) new JSONParser().parse(response);
     }
+
 }
