@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - HW1/
+      - 'HW1/**'
 jobs:
   test:
     runs-on: ubuntu-latest
