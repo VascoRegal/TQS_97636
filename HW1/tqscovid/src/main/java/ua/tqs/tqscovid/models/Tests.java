@@ -1,28 +1,35 @@
 package ua.tqs.tqscovid.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import org.springframework.lang.Nullable;
+
+@JsonInclude(Include.ALWAYS)
 public class Tests {
-    private int per_million, total;
+    @Nullable
+    private Integer per_million, total;
 
     public Tests() {}
 
-    public Tests(int per_million, int total) {
+    public Tests(Integer per_million, Integer total) {
         this.per_million = per_million;
         this.total = total;
     }
 
-    public void setPer_million(int per_million) {
+    public void setPer_million(Integer per_million) {
         this.per_million = per_million;
     }
 
-    public int getPer_million() {
+    public Integer getPer_million() {
         return this.per_million;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public int getTotal() {
+    public Integer getTotal() {
         return this.total;
     }
 }

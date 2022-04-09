@@ -1,9 +1,9 @@
 package ua.tqs.tqscovid.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class DailyStats {
-    private Date day;
+    private LocalDate day;
     private Country country;
     private Cases cases;
     private Deaths deaths;
@@ -11,7 +11,7 @@ public class DailyStats {
 
     public DailyStats() {}
 
-    public DailyStats(Date day, Country country, Cases cases, Deaths deaths, Tests tests) {
+    public DailyStats(LocalDate day, Country country, Cases cases, Deaths deaths, Tests tests) {
         this.day = day;
         this.country = country;
         this.cases = cases;
@@ -19,11 +19,11 @@ public class DailyStats {
         this.tests = tests;
     }
 
-    public void setDay(Date day) {
+    public void setDay(LocalDate day) {
         this.day = day;
     }
 
-    public Date getDay() {
+    public LocalDate getDay() {
         return this.day;
     }
 
@@ -58,4 +58,5 @@ public class DailyStats {
     public Tests getTests() {
         return this.tests;
     }
+
 }

@@ -1,11 +1,17 @@
 package ua.tqs.tqscovid.models;
 
-public class Cases {
-    private int balance, active, critical, recovered, per_million, total;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import org.springframework.lang.Nullable;
+
+@JsonInclude(Include.ALWAYS)
+public class Cases {
+    @Nullable
+    private Integer balance, active, critical, recovered, per_million, total;
     public Cases() {}
 
-    public Cases(int balance, int active, int critical, int recovered, int per_million, int total) {
+    public Cases(Integer balance, Integer active, Integer critical, Integer recovered, Integer per_million, Integer total) {
         this.balance = balance;
         this.active = active;
         this.critical = critical;
@@ -14,53 +20,54 @@ public class Cases {
         this.total = total;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(Integer balance) {
         this.balance = balance;
     }
 
-    public int getBalance() {
+    public Integer getBalance() {
         return this.balance;
     }
 
-    public void setActive(int active) {
+    public void setActive(Integer active) {
         this.active = active;
     }
 
-    public int getActive() {
+    public Integer getActive() {
         return this.active;
     }
 
-    public void setCritical(int critical) {
+    public void setCritical(Integer critical) {
         this.critical = critical;
     }
 
-    public int getCritical() {
+    public Integer getCritical() {
         return this.critical;
     }
 
-    public void setRecovered(int recovered) {
+    public void setRecovered(Integer recovered) {
         this.recovered = recovered;
     }
 
-    public int getRecovered() {
+    public Integer getRecovered() {
         return this.recovered;
     }
 
-    public void setPer_million(int per_million) {
+    public void setPer_million(Integer per_million) {
         this.per_million = per_million;
     }
 
-    public int getPer_million() {
+    public Integer getPer_million() {
         return this.per_million;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public int getTotal() {
+    public Integer getTotal() {
         return this.total;
     }
+
 }
 
 
