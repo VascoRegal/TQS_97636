@@ -131,5 +131,4 @@ public class ServiceTest {
         assertThat(service.getStatsByDay("2021-03-04", "Portugal")).hasSize(1);
         Mockito.verify(externalAPIAdapter, VerificationModeFactory.times(1)).getStatsByDay(LocalDate.parse("2021-03-04"), "Portugal");
     }
-
 }
