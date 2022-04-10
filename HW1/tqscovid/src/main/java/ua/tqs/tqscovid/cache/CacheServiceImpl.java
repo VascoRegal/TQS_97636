@@ -4,33 +4,41 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+import org.springframework.stereotype.Service;
 
 import ua.tqs.tqscovid.utils.ConfigUtils;
 
+@Service
 public class CacheServiceImpl implements ICacheService<String, Object> {
     private long expiracy = Long.parseLong(ConfigUtils.getPropertyFromConfig("cache.expiracy"));
     private Map<String, CacheEntry> map = new HashMap<String, CacheEntry>();
 
     @Override
     public Optional<Object> get(String key) {
-        System.out.println("getting " + key);
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Fetching key...");
         if (exists(key)) {
-            System.out.println("\tkey exists  " + key);
             CacheEntry entry = map.get(key);
             if (!isExpired(entry)) {
-                System.out.println("\t\tNot Expired  " + key);
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Found key! Returning cached results...");
                 return Optional.of(entry.getValue());
             }
             
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Expired key.");
             this.pop(key);
             return Optional.empty();
         }
+
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Not Found");
         return Optional.empty();
     }
 
     @Override
     public void put(String key, Object value) {
-        System.out.println("putting " + key);
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ PUT -> " + key + " ] Putting key...");
         map.put(key, new CacheEntry(value));
         
     }

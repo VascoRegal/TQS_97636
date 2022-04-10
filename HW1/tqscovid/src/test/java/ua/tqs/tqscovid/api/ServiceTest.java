@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ua.tqs.tqscovid.adapter.IExternalAPIAdapter;
+import ua.tqs.tqscovid.cache.ICacheService;
 import ua.tqs.tqscovid.models.Cases;
 import ua.tqs.tqscovid.models.Country;
 import ua.tqs.tqscovid.models.DailyStats;
@@ -31,6 +33,9 @@ public class ServiceTest {
     
     @Mock(lenient = true)
     private IExternalAPIAdapter externalAPIAdapter;
+
+    @Mock(lenient = true)
+    private ICacheService<String, Object> cacheService;
 
     @InjectMocks
     private CovIncidenceService service;
@@ -83,12 +88,24 @@ public class ServiceTest {
         Mockito.when(externalAPIAdapter.getStatsByDay(LocalDate.parse("2021-03-04"), "Portugal")).thenReturn(ptstatdaily);
         Mockito.when(externalAPIAdapter.getStatsByDay(LocalDate.parse("2021-03-04"), "Japan")).thenReturn(jpstatdaily);
         Mockito.when(externalAPIAdapter.getStatsByDay(LocalDate.parse("2021-03-04"), null)).thenReturn(s0304);
+
+        Mockito.when(cacheService.get("/stats")).thenReturn(Optional.empty());
+        Mockito.when(cacheService.get("/countries")).thenReturn(Optional.of(countires));
+        Mockito.when(cacheService.get("/countries?country=Portugal")).thenReturn(Optional.empty());
+        Mockito.when(cacheService.get("/day?country=Portugal&date=2021-03-04")).thenReturn(Optional.empty());
+        Mockito.when(cacheService.get("/day?country=Portugal&date=2021-03-04")).thenReturn(Optional.empty());
+        Mockito.when(cacheService.get("/day?country=All&date=2021-03-04")).thenReturn(Optional.empty());
     }
     
     @Test
     void whenGetAllCountires_getAllCountires() throws URISyntaxException, ParseException, IOException {
        assertThat(service.getCountries()).hasSize(4).extracting(Country::getName).contains("Portugal", "Japan", "France", "Zebequistão");
-       Mockito.verify(externalAPIAdapter, VerificationModeFactory.times(1)).getCountries();
+
+       // Make sure the external api gets no requests
+       Mockito.verify(externalAPIAdapter, VerificationModeFactory.times(0)).getCountries();
+
+       // Make sure cache is being queried
+       Mockito.verify(cacheService, VerificationModeFactory.times(1)).get("/countries");
     }
 
     @Test

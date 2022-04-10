@@ -63,9 +63,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
         
         URIBuilder uriBuilder = new URIBuilder(this.baseUri + path);
         
-        if (country != null) {
-            uriBuilder.addParameter("country", country);
-        }
+        uriBuilder.addParameter("country", country);
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uriBuilder.build().toString(), this.baseHeaders));
         List<DailyStats> stats = new ArrayList<DailyStats>();
 
@@ -93,7 +91,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
 
     @Override
     public List<DailyStats> getAllStats() throws ParseException, IOException, URISyntaxException {
-        return getStatsByCountry("");
+        return getStatsByCountry(null);
     }
 
     @Override
