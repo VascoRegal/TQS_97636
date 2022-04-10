@@ -92,21 +92,43 @@
                             <i class="fas fa-chart-pie mr-1"></i>
                             Statistics
                         </h3>
-                        <div class="card-tools">
-                            <ul class="nav nav-pills ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                            </li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div class="tab-content p-0">
                             <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
                                 <canvas id="linear" height="600"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="form-group col-4">
+                                <label>Country</label>
+                                <select class="form-control" id="countrySelect"></select>
+                            </div>
+                            <div class="form-group col-3">
+                                <label>Start Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" id="sDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask="" inputmode="numeric" placeholder="yyyy/mm/dd">
+                                </div>
+                            </div>
+                            <div class="form-group col-3">
+                                <label>End Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" id="eDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask="" inputmode="numeric" placeholder="yyyy/mm/dd">
+                                </div>
+                            </div>
+                            <div class="form-group col-2">
+                                <label>Filter</label>
+                                <div class="input-group">
+                                    <button class="form-control btn btn-primary" id="filter"><i class="fas fa-search"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -222,6 +244,7 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/inputmask/jquery.inputmask.min.js"></script>
 <script type="module" src="./js/charts.js"></script>
 </body>
 </html>

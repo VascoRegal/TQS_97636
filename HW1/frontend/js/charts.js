@@ -1,15 +1,26 @@
-import { getAll } from "./data.js"
+import { fetchAll, countries } from "./data.js"
 
+var indexed_metrics = {}
 
 $(document).ready(function() {
+    $('#sDate').inputmask('yyyy/mm/dd', { 'placeholder': 'yyyy/mm/dd' })
+    $('#eDate').inputmask('mm/dd/yyyy', { 'placeholder': 'yyyy/mm/dd' })
     updateView();
+    $('#filter').click(() => {
+        filterData();
+    })
 })
 
 
 const updateView = function() {
-    getAll((data) => {
+    fetchAll((data) => {
         renderLinearChart(data);
         loadCardInfo(data);
+        console.log(indexed_metrics);
+    })
+
+    countries((data) => {
+        populateSelects(data);
     })
 }
 
@@ -45,6 +56,8 @@ const renderLinearChart = function(data) {
         cases.push(item.cases.total);
         deaths.push(item.deaths.total);
         tests.push(item.tests.total);
+        indexed_metrics[item.day] = item;
+        
     });
 
     var linearChartData = {
@@ -117,7 +130,7 @@ const renderLinearChart = function(data) {
         plugins: {
             title: {
                 display: true,
-                text: 'Total Cases, Deaths and Tests (Worldwide)'
+                text: 'Total Cases, Deaths and Tests'
             }
         }
     }
@@ -127,4 +140,27 @@ const renderLinearChart = function(data) {
         data: barChartData,
         options: barChartOptions
     })
+}
+
+const populateSelects = function(data) {
+    var options = [];
+    options = options + '<option value="All" selected="selected">All</option>'
+    data.forEach(element => {
+        console.log(element)
+        options = options + '<option value="'+ element.name +'">'+ element.name +'</option>'
+    });
+    $("#countrySelect").html(options);
+}
+
+
+const filterData = function() {
+    var sDate = $('#sDate').val();
+    var eDate = $('#eDate').val();
+    var country = $('#countrySelect').val()
+
+    if (sDate > eDate) {
+        
+    } else {
+        console.log(country);
+    }
 }

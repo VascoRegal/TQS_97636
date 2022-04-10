@@ -75,7 +75,6 @@ public class APISportsAdapter implements IExternalAPIAdapter {
             String country_name = baseObject.get("country").toString();
             String day = baseObject.get("day").toString();
             String repetitionKey = country_name + ":" + day;
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, ">>> " + repetitionKey);
 
             if (repeatedData.contains(repetitionKey)) {
                 continue;
