@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.json.simple.JSONArray;
@@ -66,11 +68,18 @@ public class APISportsAdapter implements IExternalAPIAdapter {
         uriBuilder.addParameter("country", country);
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uriBuilder.build().toString(), this.baseHeaders));
         List<DailyStats> stats = new ArrayList<DailyStats>();
-
+        List<String> repeatedData = new ArrayList<>();
         for (Object object: (JSONArray) jsonResp.get("response")) {
             JSONObject baseObject = (JSONObject) object;
             DailyStats dailyStats = new DailyStats();
+            String country_name = baseObject.get("country").toString();
+            String day = baseObject.get("day").toString();
+            String repetitionKey = country_name + ":" + day;
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, ">>> " + repetitionKey);
 
+            if (repeatedData.contains(repetitionKey)) {
+                continue;
+            }
             dailyStats.setCountry(new Country(baseObject.get("country").toString()));
             
             JSONObject caseObject = (JSONObject) baseObject.get("cases");
@@ -84,6 +93,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
             dailyStats.setDay(LocalDate.parse(baseObject.get("day").toString()));
 
             stats.add(dailyStats);
+            repeatedData.add(repetitionKey);
         };
 
         return stats;   
@@ -91,7 +101,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
 
     @Override
     public List<DailyStats> getAllStats() throws ParseException, IOException, URISyntaxException {
-        return getStatsByCountry(null);
+        return getStatsByCountry("All");
     }
 
     @Override
