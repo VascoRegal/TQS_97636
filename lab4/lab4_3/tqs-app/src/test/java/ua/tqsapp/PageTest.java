@@ -16,7 +16,7 @@ import ua.tqsapp.pages.ReservePage;
 import ua.tqsapp.pages.WelcomePage;
 
 @ExtendWith(SeleniumJupiter.class)
-public class DockerTest {
+public class PageTest {
     private WebDriver webDriver;
 
     @BeforeEach
