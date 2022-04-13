@@ -14,7 +14,6 @@ const fetchAll = function(callback) {
         type: "GET",
         contentType: "application/json",
         success: function(data) {
-            console.log(data);
             callback(data);
         },
         error: function() {
@@ -23,8 +22,8 @@ const fetchAll = function(callback) {
     })
 }
 
-const byCountry = function(country) {
-    const uri = BASE_URI + "/stats?country=" + country;
+const byCountry = function(country, callback) {
+    const uri = BASE_URI + "/stats/country?country=" + country;
 
     $.ajax({
         url: uri,
@@ -32,7 +31,6 @@ const byCountry = function(country) {
         type: "GET",
         contentType: "application/json",
         success: function(data) {
-            console.log(data);
             callback(data);
         },
         error: function() {
@@ -50,7 +48,6 @@ const countries = function(callback) {
         type: "GET",
         contentType: "application/json",
         success: function(data) {
-            console.log(data);
             callback(data);
         },
         error: function() {
@@ -60,4 +57,4 @@ const countries = function(callback) {
 }
 
 
-export { fetchAll, countries }
+export { fetchAll, countries, byCountry }
