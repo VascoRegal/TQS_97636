@@ -18,5 +18,7 @@ Sendo a maior vulnerabilidade ter deixado o Serras fazer pushes.
 
 We obviously don't have to """"try"""" to break it :)
 
+Malta diz ah e tal o código tá um nojo, eu digo que tou a chillar com o meu 18
+
 
 
