@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
+import ua.tqs.tqscovid.models.CacheStats;
 import ua.tqs.tqscovid.models.Country;
 import ua.tqs.tqscovid.models.DailyStats;
 import ua.tqs.tqscovid.services.CovIncidenceService;
@@ -74,5 +75,10 @@ public class CovIncidenceController {
     @GetMapping("/stats/day")
     public List<DailyStats> dailystats(@RequestParam String day, String country) throws URISyntaxException, ParseException, IOException {
         return this.covIncidenceService.getStatsByDay(day, country);
+    }
+
+    @GetMapping("/cache")
+    public CacheStats cacheStats() {
+        return this.covIncidenceService.getCacheStats();
     }
 }
