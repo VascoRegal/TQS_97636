@@ -1,7 +1,5 @@
 package ua.tqs.tqscovid.models;
 
-import org.apache.catalina.webresources.Cache;
-
 public class CacheStats {
     private long total, cached, noCacheTime, cacheTime;
 
