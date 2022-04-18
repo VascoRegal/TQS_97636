@@ -37,7 +37,7 @@ jobs:
             key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             restore-keys: ${{ runner.os }}-m2
         - name: Setup sonar server
-          run:  docker start sonarqube || docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
+          run:  docker ps && docker start sonarqube && docker ps
         - name: Build and analyze
           run: cd HW1/tqscovid && mvn verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=tqs_hw1 -Dsonar.login=a719c5e329287238407b510e2a3c6eea9e255977 -Djacoco.skip=true
 
