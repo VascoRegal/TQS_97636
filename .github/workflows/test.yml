@@ -39,10 +39,6 @@ jobs:
         - name: Setup sonar server
           run:  docker start sonarqube || docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
         - name: Build and analyze
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           run: cd HW1/tqscovid && mvn verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=tqs_hw1 -Dsonar.login=a719c5e329287238407b510e2a3c6eea9e255977 -Djacoco.skip=true
 
 
