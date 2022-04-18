@@ -36,6 +36,8 @@ jobs:
             path: ~/.m2
             key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             restore-keys: ${{ runner.os }}-m2
+        - name: Setup sonar server
+          run:  docker start sonarqube || docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
         - name: Build and analyze
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
