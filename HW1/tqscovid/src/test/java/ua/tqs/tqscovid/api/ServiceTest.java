@@ -1,6 +1,7 @@
 package ua.tqs.tqscovid.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import ua.tqs.tqscovid.adapter.IExternalAPIAdapter;
 import ua.tqs.tqscovid.cache.ICacheService;
+import ua.tqs.tqscovid.models.CacheStats;
 import ua.tqs.tqscovid.models.Cases;
 import ua.tqs.tqscovid.models.Country;
 import ua.tqs.tqscovid.models.DailyStats;
@@ -130,5 +132,14 @@ public class ServiceTest {
     void whenGetValidDate_getStats() throws URISyntaxException, ParseException, IOException {
         assertThat(service.getStatsByDay("2021-03-04", "Portugal")).hasSize(1);
         Mockito.verify(externalAPIAdapter, VerificationModeFactory.times(1)).getStatsByDay(LocalDate.parse("2021-03-04"), "Portugal");
+    }
+
+    @Test
+    void testCacheTracker() throws ParseException, IOException, URISyntaxException {
+        service.getCountries();
+        service.getAllStats();
+        service.getAllStats();
+        CacheStats stats = service.getCacheStats();
+        assertTrue(stats.getTotal() ==  3 && stats.getCached() == 1);
     }
 }
