@@ -19,7 +19,9 @@ public class Country {
 
     @Override
     public boolean equals(Object other) {
-        if (other.getClass() == Country.class) { return (this.name.equals(((Country) other).name)); };
-        return false;
+        if (other == null || (other.getClass() != this.getClass())) {
+            return false;
+        }
+        return (this.name.equals(((Country) other).name));
     }
 }

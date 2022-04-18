@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import ua.tqs.tqscovid.models.Country;
 import ua.tqs.tqscovid.models.DailyStats;
 import ua.tqs.tqscovid.services.CovIncidenceService;
