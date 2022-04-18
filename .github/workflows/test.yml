@@ -14,7 +14,7 @@ jobs:
           java-version: 11
       - run: cd HW1/tqscovid && mvn test
   build:
-      name: Build
+      name: build/sonar
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
@@ -41,4 +41,4 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=tqs_hw1
+          run: cd HW1/tqscovid && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=tqs_hw1
