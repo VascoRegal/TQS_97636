@@ -1,5 +1,5 @@
 #!/bin/bash
 
-docker-compose down -v
-docker-compose build
-docker-compose up -d
+sudo docker-compose down -v
+sudo docker-compose build
+sudo docker-compose up -d
