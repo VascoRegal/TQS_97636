@@ -1,7 +1,7 @@
 
 
 
-const BASE_URI = "http://localhost:8080/api";
+const BASE_URI = "http://20.53.251.194:80/api";
 
 var metrics;
 

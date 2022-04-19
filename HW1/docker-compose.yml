@@ -1,5 +1,14 @@
 version: "3.0"
 services:
+
+  apache:
+    image: httpd:2.4-alpine
+    volumes:
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./apache/extra/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
+    ports:
+      - 80:80
+
   api:
     build: ./tqscovid
     environment:
@@ -9,16 +18,12 @@ services:
         "cache.expiracy": "100000",
         "cache.swagger-ui.path": "/docs"
       }'
-    ports:
-      - 8080:8080
     restart: on-failure
       
   client:
     build: ./frontend
     environment:
       API_URL: "localhost:8080"
-    ports:
-      - 80:80
     volumes:
       - ./frontend:/usr/share/nginx/html
 
