@@ -56,5 +56,22 @@ const countries = function(callback) {
     })
 }
 
+const fetchCache = function(callback) {
+    const uri = BASE_URI + "/cache";
 
-export { fetchAll, countries, byCountry }
+    $.ajax({
+        url: uri,
+        crossDomain: true,
+        type: "GET",
+        contentType: "application/json",
+        success: function(data) {
+            callback(data);
+        },
+        error: function() {
+            console.log("smtn went wrong");
+        } 
+    })
+}
+
+
+export { fetchAll, countries, byCountry, fetchCache }
