@@ -17,4 +17,4 @@ jobs:
     runs-on: azure
     steps:
       - uses: actions/checkout@v2
-      - run: cd HW1/ && sh prod.sh
+      - run: cd HW1/ && sudo sh prod.sh
