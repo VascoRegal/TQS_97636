@@ -12,16 +12,8 @@ services:
     ports:
       - 8080:8080
     restart: on-failure
-    healthcheck:
-      test: "curl http://localhost:8080/"
-      interval: 2s
-      timeout: 5s
-      retries: 30
       
   client:
-    depends_on:
-      api: 
-        condition: service_healthy
     build: ./frontend
     environment:
       API_URL: "localhost:8080"
