@@ -1,4 +1,4 @@
-name: Testing Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -13,3 +13,8 @@ jobs:
         with:
           java-version: 11
       - run: cd HW1/tqscovid && mvn test
+  deploy:
+    runs-on: azure
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd HW1/ && sh prod.sh
