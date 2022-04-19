@@ -1,0 +1,33 @@
+version: "3.0"
+services:
+  api:
+    build: ./tqscovid
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "rapidapi.host": "covid-193.p.rapidapi.com",
+        "rapidapi.key": "39e2c0356fmsh5b4b1106b52e164p1fa53bjsn44626571f302",
+        "cache.expiracy": "100000",
+        "cache.swagger-ui.path": "/docs"
+      }'
+    ports:
+      - 8080:8080
+    restart: on-failure
+    healthcheck:
+      test: "curl http://localhost:8080/"
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      
+  client:
+    depends_on:
+      api: 
+        condition: service_healthy
+    build: ./frontend
+    environment:
+      API_URL: "localhost:8080"
+    ports:
+      - 8000:80
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+

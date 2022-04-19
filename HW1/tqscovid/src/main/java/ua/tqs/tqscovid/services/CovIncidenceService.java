@@ -91,10 +91,6 @@ public class CovIncidenceService {
             return new ArrayList<DailyStats>();
         }
 
-        if (country == null) {
-            country = "All";
-        }
-
         String cache_key = "/day?country" + country + "&date=" + date;
 
         long start = new Date().getTime();
