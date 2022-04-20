@@ -27,7 +27,8 @@ import ua.tqs.tqscovid.utils.JsonUtils;
 @Service
 public class APISportsAdapter implements IExternalAPIAdapter {
     
-    private final String baseUri = "https://covid-193.p.rapidapi.com"; 
+    private static final String baseUri = "https://covid-193.p.rapidapi.com"; 
+    private static final String jsonBodyKey = "response";
     private String apiKey;
 
     private IHttpClient httpClient;
@@ -38,7 +39,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
         this.httpClient = httpClient;
         this.apiKey = ConfigUtils.getPropertyFromConfig("rapidapi.key");
 
-        this.baseHeaders = new HashMap<String, Object>();
+        this.baseHeaders = new HashMap<>();
         baseHeaders.put("X-RapidAPI-Key", this.apiKey);
         
     }
@@ -46,11 +47,11 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     @Override
     public List<Country> getCountries() throws ParseException, IOException {
         String path = "/countries";
-        String uri = this.baseUri + path;
+        String uri = APISportsAdapter.baseUri + path;
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uri, this.baseHeaders));
-        List<Country> countires = new ArrayList<Country>();
+        List<Country> countires = new ArrayList<>();
 
-        for (Object o: (JSONArray) jsonResp.get("response")) {
+        for (Object o: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
             countires.add(new Country(o.toString()));
         };
 
@@ -61,13 +62,13 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     public List<DailyStats> getStatsByCountry(String country) throws ParseException, IOException, URISyntaxException {
         String path = "/history";
         
-        URIBuilder uriBuilder = new URIBuilder(this.baseUri + path);
+        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.baseUri + path);
         
         uriBuilder.addParameter("country", country);
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uriBuilder.build().toString(), this.baseHeaders));
-        List<DailyStats> stats = new ArrayList<DailyStats>();
+        List<DailyStats> stats = new ArrayList<>();
         List<String> repeatedData = new ArrayList<>();
-        for (Object object: (JSONArray) jsonResp.get("response")) {
+        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
             JSONObject baseObject = (JSONObject) object;
             DailyStats dailyStats = new DailyStats();
             String country_name = baseObject.get("country").toString();
@@ -91,7 +92,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
 
             stats.add(dailyStats);
             repeatedData.add(repetitionKey);
-        };
+        }
 
         return stats;   
     }
@@ -105,7 +106,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     public List<DailyStats> getStatsByDay(LocalDate date, String country) throws URISyntaxException, ParseException, IOException {
         String path = "/history";
 
-        URIBuilder uriBuilder = new URIBuilder(this.baseUri + path);
+        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.baseUri + path);
         if (country != null) {
             uriBuilder.addParameter("country", country);
         } else {
@@ -116,10 +117,10 @@ public class APISportsAdapter implements IExternalAPIAdapter {
         }
         
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uriBuilder.build().toString(), this.baseHeaders));
-        List<DailyStats> stats = new ArrayList<DailyStats>();
+        List<DailyStats> stats = new ArrayList<>();
         List<String> countires = new ArrayList<>();
 
-        for (Object object: (JSONArray) jsonResp.get("response")) {
+        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
             JSONObject baseObject = (JSONObject) object;
             DailyStats dailyStats = new DailyStats();
             String country_name = baseObject.get("country").toString();
@@ -143,7 +144,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
             countires.add(country_name);
             stats.add(dailyStats);
             
-        };
+        }
 
         return stats;   
     }
