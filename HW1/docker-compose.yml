@@ -16,7 +16,7 @@ services:
         "rapidapi.host": "covid-193.p.rapidapi.com",
         "rapidapi.key": "39e2c0356fmsh5b4b1106b52e164p1fa53bjsn44626571f302",
         "cache.expiracy": "100000",
-        "cache.swagger-ui.path": "/docs"
+        "springdoc.swagger-ui.path": "/docs"
       }'
     restart: on-failure
       

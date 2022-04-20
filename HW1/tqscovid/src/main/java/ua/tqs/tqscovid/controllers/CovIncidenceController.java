@@ -66,7 +66,7 @@ public class CovIncidenceController {
         return this.covIncidenceService.getStatsByCountry(country);
     }
 
-    @Operation(summary = "Get stats between dates")
+    @Operation(summary = "Get stats on day (YYYY-MM-DD)")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Between date stat list", 
         content = @Content(mediaType = "application/json"))
     //@ApiResponse(responseCode = "404", description = "Country not found", 
@@ -77,6 +77,7 @@ public class CovIncidenceController {
         return this.covIncidenceService.getStatsByDay(day, country);
     }
 
+    @Operation(summary = "Get caching info")
     @GetMapping("/cache")
     public CacheStats cacheStats() {
         return this.covIncidenceService.getCacheStats();
