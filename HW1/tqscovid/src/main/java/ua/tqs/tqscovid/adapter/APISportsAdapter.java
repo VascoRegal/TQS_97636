@@ -27,8 +27,8 @@ import ua.tqs.tqscovid.utils.JsonUtils;
 @Service
 public class APISportsAdapter implements IExternalAPIAdapter {
     
-    private static final String baseUri = "https://covid-193.p.rapidapi.com"; 
-    private static final String jsonBodyKey = "response";
+    private static final String BASE_URI = "https://covid-193.p.rapidapi.com"; 
+    private static final String JSON_BODY_KEY = "response";
     private String apiKey;
 
     private IHttpClient httpClient;
@@ -47,13 +47,13 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     @Override
     public List<Country> getCountries() throws ParseException, IOException {
         String path = "/countries";
-        String uri = APISportsAdapter.baseUri + path;
+        String uri = APISportsAdapter.BASE_URI + path;
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uri, this.baseHeaders));
         List<Country> countires = new ArrayList<>();
 
-        for (Object o: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
+        for (Object o: (JSONArray) jsonResp.get(APISportsAdapter.JSON_BODY_KEY)) {
             countires.add(new Country(o.toString()));
-        };
+        }
 
         return countires;   
     }
@@ -62,18 +62,18 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     public List<DailyStats> getStatsByCountry(String country) throws ParseException, IOException, URISyntaxException {
         String path = "/history";
         
-        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.baseUri + path);
+        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.BASE_URI + path);
         
         uriBuilder.addParameter("country", country);
         JSONObject jsonResp = JsonUtils.responseToJson(this.httpClient.doGet(uriBuilder.build().toString(), this.baseHeaders));
         List<DailyStats> stats = new ArrayList<>();
         List<String> repeatedData = new ArrayList<>();
-        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
+        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.JSON_BODY_KEY)) {
             JSONObject baseObject = (JSONObject) object;
             DailyStats dailyStats = new DailyStats();
-            String country_name = baseObject.get("country").toString();
+            String countryName = baseObject.get("country").toString();
             String day = baseObject.get("day").toString();
-            String repetitionKey = country_name + ":" + day;
+            String repetitionKey = countryName + ":" + day;
 
             if (repeatedData.contains(repetitionKey)) {
                 continue;
@@ -106,7 +106,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     public List<DailyStats> getStatsByDay(LocalDate date, String country) throws URISyntaxException, ParseException, IOException {
         String path = "/history";
 
-        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.baseUri + path);
+        URIBuilder uriBuilder = new URIBuilder(APISportsAdapter.BASE_URI + path);
         if (country != null) {
             uriBuilder.addParameter("country", country);
         } else {
@@ -120,16 +120,16 @@ public class APISportsAdapter implements IExternalAPIAdapter {
         List<DailyStats> stats = new ArrayList<>();
         List<String> countires = new ArrayList<>();
 
-        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.jsonBodyKey)) {
+        for (Object object: (JSONArray) jsonResp.get(APISportsAdapter.JSON_BODY_KEY)) {
             JSONObject baseObject = (JSONObject) object;
             DailyStats dailyStats = new DailyStats();
-            String country_name = baseObject.get("country").toString();
+            String countryName = baseObject.get("country").toString();
 
-            if (countires.contains(country_name)) {
+            if (countires.contains(countryName)) {
                 continue;
             }
 
-            dailyStats.setCountry(new Country(country_name));
+            dailyStats.setCountry(new Country(countryName));
             
             JSONObject caseObject = (JSONObject) baseObject.get("cases");
             JSONObject deathObject = (JSONObject) baseObject.get("deaths");
@@ -141,7 +141,7 @@ public class APISportsAdapter implements IExternalAPIAdapter {
 
             dailyStats.setDay(LocalDate.parse(baseObject.get("day").toString()));
             
-            countires.add(country_name);
+            countires.add(countryName);
             stats.add(dailyStats);
             
         }
@@ -150,27 +150,27 @@ public class APISportsAdapter implements IExternalAPIAdapter {
     }
 
     private Cases parseCases(JSONObject caseObject) {
-        Integer balance = Optional.ofNullable(caseObject.get("new")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer active = Optional.ofNullable(caseObject.get("active")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer critical = Optional.ofNullable(caseObject.get("critical")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer recovered = Optional.ofNullable(caseObject.get("recovered")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer per_million = Optional.ofNullable(caseObject.get("1M_pop")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(caseObject.get("total")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer balance = Optional.ofNullable(caseObject.get("new")).map(this::retrieveIntFromField).orElse(null);
+        Integer active = Optional.ofNullable(caseObject.get("active")).map(this::retrieveIntFromField).orElse(null);
+        Integer critical = Optional.ofNullable(caseObject.get("critical")).map(this::retrieveIntFromField).orElse(null);
+        Integer recovered = Optional.ofNullable(caseObject.get("recovered")).map(this::retrieveIntFromField).orElse(null);
+        Integer per_million = Optional.ofNullable(caseObject.get("1M_pop")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(caseObject.get("total")).map(this::retrieveIntFromField).orElse(null);
 
         return new Cases(balance, active, critical, recovered, per_million, total);
     }
 
     private Deaths parseDeaths(JSONObject deathObject) {
-        Integer balance = Optional.ofNullable(deathObject.get("new")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer per_million = Optional.ofNullable(deathObject.get("1M_pop")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(deathObject.get("total")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer balance = Optional.ofNullable(deathObject.get("new")).map(this::retrieveIntFromField).orElse(null);
+        Integer per_million = Optional.ofNullable(deathObject.get("1M_pop")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(deathObject.get("total")).map(this::retrieveIntFromField).orElse(null);
 
         return new Deaths(balance, per_million, total);
     }
 
     private Tests parseTests(JSONObject testObject) {
-        Integer per_million = Optional.ofNullable(testObject.get("1M_pop")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(testObject.get("total")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer per_million = Optional.ofNullable(testObject.get("1M_pop")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(testObject.get("total")).map(this::retrieveIntFromField).orElse(null);
 
         return new Tests(per_million, total);
     }

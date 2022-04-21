@@ -46,7 +46,7 @@ public class AkashAdapter implements IExternalAPIAdapter {
         List<Country> countries = new ArrayList<>();
         for (Object o: (JSONArray) this.globalRequest.get("countries_stat")) {
             JSONObject baseObject = (JSONObject) o;
-            countries.add(new Country(baseObject.get("country_name").toString()));
+            countries.add(new Country(baseObject.get("countryName").toString()));
         }
         return countries;
     }
@@ -57,8 +57,8 @@ public class AkashAdapter implements IExternalAPIAdapter {
         String date = this.globalRequest.get("statistic_taken_at").toString().split(" ")[0];
         for (Object o: (JSONArray) this.globalRequest.get("countries_stat")) {
             JSONObject baseObject = (JSONObject) o;
-            String country_name = baseObject.get("country_name").toString();
-            if (country.equals(country_name)) {
+            String countryName = baseObject.get("countryName").toString();
+            if (country.equals(countryName)) {
                 stats.add(new DailyStats(LocalDate.parse(date), 
                     new Country(country),
                     parseCases(baseObject),
@@ -77,9 +77,9 @@ public class AkashAdapter implements IExternalAPIAdapter {
         String date = this.globalRequest.get("statistic_taken_at").toString().split(" ")[0];
         for (Object o: (JSONArray) this.globalRequest.get("countries_stat")) {
             JSONObject baseObject = (JSONObject) o;
-            String country_name = baseObject.get("country_name").toString();
+            String countryName = baseObject.get("countryName").toString();
             stats.add(new DailyStats(LocalDate.parse(date), 
-                new Country(country_name),
+                new Country(countryName),
                 parseCases(baseObject),
                 parseDeaths(baseObject),
                 parseTests(baseObject)));
@@ -98,27 +98,27 @@ public class AkashAdapter implements IExternalAPIAdapter {
     }
 
     private Cases parseCases(JSONObject caseObject) {
-        Integer balance = Optional.ofNullable(caseObject.get("new_cases")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer active = Optional.ofNullable(caseObject.get("active_cases")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer critical = Optional.ofNullable(caseObject.get("serious_critical")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer recovered = Optional.ofNullable(caseObject.get("total_recovered")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer per_million = Optional.ofNullable(caseObject.get("total_cases_per_1m_population")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(caseObject.get("cases")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer balance = Optional.ofNullable(caseObject.get("new_cases")).map(this::retrieveIntFromField).orElse(null);
+        Integer active = Optional.ofNullable(caseObject.get("active_cases")).map(this::retrieveIntFromField).orElse(null);
+        Integer critical = Optional.ofNullable(caseObject.get("serious_critical")).map(this::retrieveIntFromField).orElse(null);
+        Integer recovered = Optional.ofNullable(caseObject.get("total_recovered")).map(this::retrieveIntFromField).orElse(null);
+        Integer per_million = Optional.ofNullable(caseObject.get("total_cases_per_1m_population")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(caseObject.get("cases")).map(this::retrieveIntFromField).orElse(null);
 
         return new Cases(balance, active, critical, recovered, per_million, total);
     }
 
     private Deaths parseDeaths(JSONObject deathObject) {
-        Integer balance = Optional.ofNullable(deathObject.get("new_deaths")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer per_million = Optional.ofNullable(deathObject.get("deaths_per_1m_population")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(deathObject.get("deaths")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer balance = Optional.ofNullable(deathObject.get("new_deaths")).map(this::retrieveIntFromField).orElse(null);
+        Integer per_million = Optional.ofNullable(deathObject.get("deaths_per_1m_population")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(deathObject.get("deaths")).map(this::retrieveIntFromField).orElse(null);
 
         return new Deaths(balance, per_million, total);
     }
 
     private Tests parseTests(JSONObject testObject) {
-        Integer per_million = Optional.ofNullable(testObject.get("tests_per_1m_population")).map(n -> retrieveIntFromField(n)).orElse(null);
-        Integer total = Optional.ofNullable(testObject.get("total_tests")).map(n -> retrieveIntFromField(n)).orElse(null);
+        Integer per_million = Optional.ofNullable(testObject.get("tests_per_1m_population")).map(this::retrieveIntFromField).orElse(null);
+        Integer total = Optional.ofNullable(testObject.get("total_tests")).map(this::retrieveIntFromField).orElse(null);
 
         return new Tests(per_million, total);
     }
