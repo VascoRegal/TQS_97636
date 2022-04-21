@@ -1,6 +1,3 @@
-
-
-
 const BASE_URI = "http://20.53.251.194:80/api";
 
 var metrics;
