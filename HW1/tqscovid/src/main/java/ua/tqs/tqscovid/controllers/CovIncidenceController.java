@@ -20,6 +20,9 @@ import ua.tqs.tqscovid.models.Country;
 import ua.tqs.tqscovid.models.DailyStats;
 import ua.tqs.tqscovid.services.CovIncidenceService;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/")
@@ -40,6 +43,7 @@ public class CovIncidenceController {
     })
     @GetMapping("/countries")
     public List<Country> countries() throws URISyntaxException, ParseException, IOException {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CONTROLLER> GET {0}", "/countries");
         return this.covIncidenceService.getCountries();
     }
 
@@ -52,6 +56,7 @@ public class CovIncidenceController {
     })
     @GetMapping("/stats")
     public List<DailyStats> stats() throws ParseException, IOException, URISyntaxException {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CONTROLLER> GET {0}", "/stats");
         return this.covIncidenceService.getAllStats();
     }
 
@@ -63,6 +68,7 @@ public class CovIncidenceController {
     })
     @GetMapping("/stats/country")
     public List<DailyStats> countrystats(@RequestParam String country) throws ParseException, IOException, URISyntaxException {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CONTROLLER> GET {0}", "/stats/country?country=" + country);
         return this.covIncidenceService.getStatsByCountry(country);
     }
 
@@ -74,12 +80,14 @@ public class CovIncidenceController {
     })
     @GetMapping("/stats/day")
     public List<DailyStats> dailystats(@RequestParam String day, String country) throws URISyntaxException, ParseException, IOException {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CONTROLLER> GET {0}", "/stats/day?day=" + day + "&country=" + country);
         return this.covIncidenceService.getStatsByDay(day, country);
     }
 
     @Operation(summary = "Get caching info")
     @GetMapping("/cache")
     public CacheStats cacheStats() {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CONTROLLER> GET {0}", "/cache");
         return this.covIncidenceService.getCacheStats();
     }
 }

@@ -19,26 +19,26 @@ public class CacheServiceImpl implements ICacheService<String, Object> {
 
     @Override
     public Optional<Object> get(String key) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Fetching key...");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> {0} ] Fetching key...", key);
         if (exists(key)) {
             CacheEntry entry = map.get(key);
             if (!isExpired(entry)) {
-                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Found key! Returning cached results...");
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET ->  {0} ] Found key! Returning cached results...", key);
                 return Optional.of(entry.getValue());
             }
             
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Expired key.");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> {0} ] Expired key.", key);
             this.pop(key);
             return Optional.empty();
         }
 
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> " + key + " ] Not Found");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ GET -> {0} ] Not Found", key);
         return Optional.empty();
     }
 
     @Override
     public void put(String key, Object value) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ PUT -> " + key + " ] Putting key...");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<CACHE>[ PUT -> {0} ] Putting key...", key);
         map.put(key, new CacheEntry(value));
         
     }

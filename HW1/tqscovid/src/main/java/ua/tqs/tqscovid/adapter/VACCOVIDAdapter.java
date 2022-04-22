@@ -51,7 +51,6 @@ public class VACCOVIDAdapter implements IExternalAPIAdapter {
 
     @Override
     public List<DailyStats> getStatsByCountry(String country) throws ParseException, IOException, URISyntaxException {
-        System.out.println(this.isoMap);
         String path = "/covid-ovid-data/sixmonth/" + this.isoMap.get(country);
         JSONArray jsonResp = JsonUtils.responseToJsonArray(this.httpClient.doGet(VACCOVIDAdapter.BASE_URI + path, this.baseHeaders));
 
@@ -89,7 +88,7 @@ public class VACCOVIDAdapter implements IExternalAPIAdapter {
     @Override
     public List<DailyStats> getStatsByDay(LocalDate date, String country)
             throws URISyntaxException, ParseException, IOException {
-        return null;
+        return new ArrayList<>();
     }
 
     private Map<String, String> generateIsoMap() throws ParseException, IOException {

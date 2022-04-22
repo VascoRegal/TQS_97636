@@ -30,7 +30,6 @@ public class HttpClientImplTest {
         String get = this.httpClient.doGet(uri, new HashMap<>());
 
         JSONObject obj = JsonUtils.responseToJson(get);
-        System.out.println(obj.get("userId").getClass());
         assertTrue(obj.get("userId").equals(1L));
         assertTrue(obj.get("title").equals("delectus aut autem"));
     }
