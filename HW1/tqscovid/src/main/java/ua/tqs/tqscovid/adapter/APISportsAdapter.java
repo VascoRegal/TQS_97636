@@ -8,12 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ua.tqs.tqscovid.http.IHttpClient;
 import ua.tqs.tqscovid.models.Cases;
@@ -24,19 +27,19 @@ import ua.tqs.tqscovid.models.Tests;
 import ua.tqs.tqscovid.utils.ConfigUtils;
 import ua.tqs.tqscovid.utils.JsonUtils;
 
-@Service
 public class APISportsAdapter implements IExternalAPIAdapter {
     
     private static final String BASE_URI = "https://covid-193.p.rapidapi.com"; 
     private static final String JSON_BODY_KEY = "response";
     private String apiKey;
 
+    @Autowired
     private IHttpClient httpClient;
 
     private Map<String, Object> baseHeaders;
 
-    public APISportsAdapter(IHttpClient httpClient) {
-        this.httpClient = httpClient;
+    public APISportsAdapter() {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<ADAPTER> Using APISports Adaper.");
         this.apiKey = ConfigUtils.getPropertyFromConfig("rapidapi.key");
 
         this.baseHeaders = new HashMap<>();

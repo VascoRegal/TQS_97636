@@ -8,12 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ua.tqs.tqscovid.http.IHttpClient;
 import ua.tqs.tqscovid.models.Cases;
@@ -24,33 +29,35 @@ import ua.tqs.tqscovid.models.Tests;
 import ua.tqs.tqscovid.utils.ConfigUtils;
 import ua.tqs.tqscovid.utils.JsonUtils;
 
-@Service
 public class VACCOVIDAdapter implements IExternalAPIAdapter {
     private static final String BASE_URI = "https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api"; 
     private String apiKey;
 
+    @Autowired
     private IHttpClient httpClient;
 
     private Map<String, Object> baseHeaders;
     private Map<String, String> isoMap;
 
-    public VACCOVIDAdapter(IHttpClient httpClient) throws ParseException, IOException {
-        this.httpClient = httpClient;
+    public VACCOVIDAdapter() {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "<ADAPTER> Using VACCOVID Adaper.");
         this.apiKey = ConfigUtils.getPropertyFromConfig("rapidapi.key");
 
         this.baseHeaders = new HashMap<>();
         baseHeaders.put("X-RapidAPI-Key", this.apiKey);
-        this.isoMap = generateIsoMap();
-        
     }
 
     @Override
     public List<Country> getCountries() throws URISyntaxException, ParseException, IOException {
+        if (this.isoMap == null)
+        this.isoMap = this.generateIsoMap();
         return new ArrayList<>(this.isoMap.keySet()).stream().map(n -> new Country(n)).collect(Collectors.toList());
     }
 
     @Override
     public List<DailyStats> getStatsByCountry(String country) throws ParseException, IOException, URISyntaxException {
+        if (this.isoMap == null)
+        this.isoMap = this.generateIsoMap();
         String path = "/covid-ovid-data/sixmonth/" + this.isoMap.get(country);
         JSONArray jsonResp = JsonUtils.responseToJsonArray(this.httpClient.doGet(VACCOVIDAdapter.BASE_URI + path, this.baseHeaders));
 
@@ -91,7 +98,7 @@ public class VACCOVIDAdapter implements IExternalAPIAdapter {
         return new ArrayList<>();
     }
 
-    private Map<String, String> generateIsoMap() throws ParseException, IOException {
+    public Map<String, String> generateIsoMap() throws ParseException, IOException {
         String path = "/npm-covid-data/countries-name-ordered";
         Map<String, String> map = new HashMap<>();
         String uri = VACCOVIDAdapter.BASE_URI + path;
@@ -100,7 +107,6 @@ public class VACCOVIDAdapter implements IExternalAPIAdapter {
             JSONObject obj = (JSONObject) o;
             map.put(obj.get("Country").toString(), obj.get("ThreeLetterSymbol").toString());
         }
-
         return map;
     }
 
@@ -143,4 +149,5 @@ public class VACCOVIDAdapter implements IExternalAPIAdapter {
             return null;
         }
     }
+
 }

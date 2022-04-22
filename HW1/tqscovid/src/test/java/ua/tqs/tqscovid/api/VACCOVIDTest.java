@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -34,11 +35,11 @@ public class VACCOVIDTest {
     @Mock(lenient = true)
     private IHttpClient httpClient;
 
+    @InjectMocks
     private VACCOVIDAdapter vaccovidAdapter;
 
     @BeforeEach
     void setup() throws IOException, ParseException {
-        MockitoAnnotations.initMocks(this);
         String baseurl = "https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api";
         Map<String, Object> headers = new HashMap<>();
         headers.put("X-RapidAPI-Key", ConfigUtils.getPropertyFromConfig("rapidapi.key"));
@@ -47,8 +48,6 @@ public class VACCOVIDTest {
         String portugalStats = "[{\"id\":\"02ac2181-0648-401c-87e9-9c97071f3d06\",\"symbol\":\"PRT\",\"Country\":\"Portugal\",\"Continent\":\"Europe\",\"date\":\"2022-01-30\",\"total_cases\":2611886,\"new_cases\":45335,\"total_deaths\":19856,\"new_deaths\":29,\"total_tests\":0,\"new_tests\":0}]";
         Mockito.when(httpClient.doGet(baseurl + "/npm-covid-data/countries-name-ordered", headers)).thenReturn(countriesResp);
         Mockito.when(httpClient.doGet(baseurl + "/covid-ovid-data/sixmonth/prt", headers)).thenReturn(portugalStats);
-
-        this.vaccovidAdapter = new VACCOVIDAdapter(httpClient);
     }
 
     @Test

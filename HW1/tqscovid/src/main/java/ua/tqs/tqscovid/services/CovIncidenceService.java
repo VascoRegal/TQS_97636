@@ -1,6 +1,7 @@
 package ua.tqs.tqscovid.services;
 
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.tqscovid.adapter.IExternalAPIAdapter;
@@ -20,15 +21,16 @@ import java.util.Optional;
 
 @Service
 public class CovIncidenceService {
+
+    @Autowired
     private IExternalAPIAdapter externalAPIAdapter;
 
+    @Autowired
     private ICacheService<String, Object> cache;
 
     private CacheTracker cacheTracker;
 
-    public CovIncidenceService(IExternalAPIAdapter externalAPIAdapter, ICacheService<String, Object> cacheService) {
-        this.externalAPIAdapter = externalAPIAdapter;
-        this.cache = cacheService;
+    public CovIncidenceService() {
         this.cacheTracker = new CacheTracker();
     }
 

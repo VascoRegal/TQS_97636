@@ -33,10 +33,9 @@ public class ServiceApiSportsIT {
     @BeforeEach
     public void setup() {
         this.httpClient = new CovIncidenceHttpClient();
-        this.adapter = new APISportsAdapter(httpClient);
         this.cache = new CacheServiceImpl();
         this.cache.setExpiracy(5);
-        this.service = new CovIncidenceService(this.adapter, cache);
+        this.service = new CovIncidenceService();
     }
 
     @Test
