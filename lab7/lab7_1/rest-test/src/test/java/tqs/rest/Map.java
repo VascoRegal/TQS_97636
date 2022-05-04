@@ -1,0 +1,5 @@
+package tqs.rest;
+
+public class Map<T1, T2> {
+
+}
